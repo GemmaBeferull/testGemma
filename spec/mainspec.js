@@ -22,7 +22,7 @@ describe('calculo de marcador', function(){
         if (esCorrecta && tiempo < 2){
             return puntos + 2;
         }
-        if (!esCorrecta && tiempo >= 10){
+        if (!esCorrecta && tiempo > 10){
             return puntos - 2;
         }
         if (esCorrecta && tiempo >= 2 && tiempo <= 10){
@@ -31,6 +31,10 @@ describe('calculo de marcador', function(){
         if(esCorrecta && tiempo > 10){
             return puntos;
         }
+        if (!esCorrecta && tiempo <= 10){
+            return puntos - 1;
+        }
+        
 
     }
 
@@ -40,8 +44,8 @@ describe('calculo de marcador', function(){
     });
 
     it("resta puntos si fallo y tardo mucho tiempo", function(){
-        expect(recalcularMarcador(0, false, 10)).toBe(-2);
-        expect(recalcularMarcador(2, false, 10)).toBe(0);
+        expect(recalcularMarcador(0, false, 11)).toBe(-2);
+        expect(recalcularMarcador(2, false, 11)).toBe(0);
     });
   
     it("suma puntos si acierto entre 2 y 10 segundos", function(){
@@ -53,6 +57,9 @@ describe('calculo de marcador', function(){
         expect(recalcularMarcador(0, true, 11)).toBe(0);
         expect(recalcularMarcador(2, true, 11)).toBe(2);
     });
-
+    it("resta puntos si fallo y tardo poco tiempo", function(){
+        expect(recalcularMarcador(0, false, 10)).toBe(-1);
+        expect(recalcularMarcador(2, false, 10)).toBe(1);
+    });
 
 });
