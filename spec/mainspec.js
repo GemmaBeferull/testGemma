@@ -15,16 +15,23 @@
 *
 *return nombre + " puntaje " + (num1 + num2);
 * */
-describe('calculo de marcador', function(){
-    function numerarPregunta(puntos, hayRespuesta, tiempo, arrayIndex){
-        if (!hayRespuesta && tiempo > 20){
-            return  "la posicion en el array sera " +  (arrayIndex + 1) +   " y los puntos " + (puntos - 3) ;
+describe('posicion en el array', function(){
+    function numerarPregunta(hayRespuesta, tiempo, arrayIndex){
+        if (tiempo > 20){
+            return arrayIndex + 1;
+        }
+        if (hayRespuesta){
+            return arrayIndex + 1;
         }
     }
 
-    it("resta si no responde en 20segundos", function(){
-        expect(numerarPregunta(0, false, 21, 1)).toBe('la posicion en el array sera 2 y los puntos -3');
-        expect(numerarPregunta(0, false, 20, 1)).toBe('la posicion en el array sera 2 y los puntos -3');
+    it("suma una posicion en el array si tarda mas de 20 segundos en responder", function(){
+        expect(numerarPregunta(false, 21, 1)).toBe(2);
+        expect(numerarPregunta(true, 21, 1)).toBe(2);
+    });
+    it("suma una posicion en el array si hay una respuesta", function(){
+        expect(numerarPregunta(true, 2, 1)).toBe(2);
+        
     });
 
 
@@ -33,6 +40,9 @@ describe('calculo de marcador', function(){
 
 describe('calculo de marcador', function(){
     function recalcularMarcador(puntos, esCorrecta, tiempo){
+        if (tiempo > 20){
+            return puntos - 3;
+        }
         if (esCorrecta && tiempo < 2){
             return puntos + 2;
         }
@@ -48,7 +58,7 @@ describe('calculo de marcador', function(){
         if (!esCorrecta && tiempo <= 10){
             return puntos - 1;
         }
-        
+       
 
     }
 
@@ -74,6 +84,10 @@ describe('calculo de marcador', function(){
     it("resta puntos si fallo y tardo poco tiempo", function(){
         expect(recalcularMarcador(0, false, 10)).toBe(-1);
         expect(recalcularMarcador(2, false, 10)).toBe(1);
+    });
+    it("resta puntos si tarda mas de 20segundos", function(){
+        expect(recalcularMarcador(0, false, 21)).toBe(-3);
+        expect(recalcularMarcador(2, true, 21)).toBe(-1);
     });
 
 });
