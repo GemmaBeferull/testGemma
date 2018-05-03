@@ -13,8 +13,22 @@
 *      No se puede pasar sin responder
 *      Si en 20 segundos no has respondido , pasa a siguiente pregunta y pierdes 3 punto
 *
-*
+*return nombre + " puntaje " + (num1 + num2);
 * */
+describe('calculo de marcador', function(){
+    function numerarPregunta(puntos, hayRespuesta, tiempo, arrayIndex){
+        if (!hayRespuesta && tiempo > 20){
+            return  "la posicion en el array sera " +  (arrayIndex + 1) +   " y los puntos " + (puntos - 3) ;
+        }
+    }
+
+    it("resta si no responde en 20segundos", function(){
+        expect(numerarPregunta(0, false, 21, 1)).toBe('la posicion en el array sera 2 y los puntos -3');
+        expect(numerarPregunta(0, false, 20, 1)).toBe('la posicion en el array sera 2 y los puntos -3');
+    });
+
+
+});
 
 
 describe('calculo de marcador', function(){
