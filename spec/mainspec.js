@@ -19,11 +19,14 @@
 
 describe('calculo de marcador', function(){
     function recalcularMarcador(puntos, esCorrecta, tiempo){
-        if (esCorrecta && tiempo <= 2){
+        if (esCorrecta && tiempo < 2){
             return puntos + 2;
         }
         if (!esCorrecta && tiempo >= 10){
             return puntos - 2;
+        }
+        if (esCorrecta && tiempo >= 2 && tiempo <= 10){
+            return puntos + 1;
         }
 
     }
@@ -37,6 +40,11 @@ describe('calculo de marcador', function(){
         expect(recalcularMarcador(0, false, 10)).toBe(-2);
         expect(recalcularMarcador(2, false, 10)).toBe(0);
     });
-
+  
+   
+    it("suma puntos si acierto entre 2 y 10 segundos", function(){
+        expect(recalcularMarcador(0, true, 10)).toBe(1);
+        expect(recalcularMarcador(2, true, 2)).toBe(3);
+    });
 
 });
