@@ -13,8 +13,39 @@
 *      No se puede pasar sin responder
 *      Si en 20 segundos no has respondido , pasa a siguiente pregunta y pierdes 3 punto
 *
-*return nombre + " puntaje " + (num1 + num2);
 * */
+
+
+// var questions = [
+//     {title: '¿Cuántos años tiene Celio?', answer: {a: '35', b: 'No lo sabe ni ella', c: '25' }, correctAnswer: 'b'},
+//     {title: '¿Cuál es la capital de Zambia?', answer: {a: 'Lusaka', b: 'Harare', c: 'Madrid' }, correctAnswer: 'a'},
+//     {title: '¿Cuál es el nombre completo de Freud?', answer: {a: 'Adolf', b: 'Sefarad', c: 'Sigmund' }, correctAnswer: 'c'},
+//     {title: '¿Cuál es el animal más rápido del mundo?', answer: {a: 'Guepardo', b: 'León', c:'Tortuga' }, correctAnswer: 'a'}
+//   ]
+
+
+
+
+  describe('reiniciar tiempo', function(){
+    function reiniciaTiempo(hayRespuesta, tiempo){
+        if (tiempo > 20){
+            return tiempo = 0;
+        }
+        if (hayRespuesta){
+            return tiempo = 0;
+        }
+    }
+
+    it("reinicia el tiempo si tarda mas de 20 segundos en responder", function(){
+        expect(reiniciaTiempo(false, 21)).toBe(0);
+        expect(reiniciaTiempo(true, 21)).toBe(0);
+    });
+    it("reinicia el tiempo si hay una respuesta", function(){
+        expect(reiniciaTiempo(true, 2)).toBe(0);          
+    });
+
+});
+
 describe('posicion en el array', function(){
     function numerarPregunta(hayRespuesta, tiempo, arrayIndex){
         if (tiempo > 20){
@@ -30,64 +61,57 @@ describe('posicion en el array', function(){
         expect(numerarPregunta(true, 21, 1)).toBe(2);
     });
     it("suma una posicion en el array si hay una respuesta", function(){
-        expect(numerarPregunta(true, 2, 1)).toBe(2);
-        
+        expect(numerarPregunta(true, 2, 1)).toBe(2);        
     });
-
 
 });
 
-
-describe('calculo de marcador', function(){
-    function recalcularMarcador(puntos, esCorrecta, tiempo){
-        if (tiempo > 20){
-            return puntos - 3;
-        }
-        if (esCorrecta && tiempo < 2){
-            return puntos + 2;
-        }
-        if (!esCorrecta && tiempo > 10){
-            return puntos - 2;
-        }
-        if (esCorrecta && tiempo >= 2 && tiempo <= 10){
-            return puntos + 1;
-        }
-        if(esCorrecta && tiempo > 10){
-            return puntos;
-        }
-        if (!esCorrecta && tiempo <= 10){
-            return puntos - 1;
-        }
-       
-
+describe ('calculo de marcador', function(){
+    function recalcularAcertandoPregunta (marcador, tiempo) {
+      if (tiempo <= 2) {
+        return marcador + 2;
+      }
+      if (tiempo > 2 && tiempo <= 10) {
+        return marcador + 1;
+      }
+      if (tiempo > 10) {
+        return marcador;
+      }
+    }
+    function recalcularFallandoPregunta (marcador, tiempo) {
+      if (tiempo <= 10) {
+        return marcador - 1;
+      }
+      if (tiempo > 10) {
+        return marcador - 2;
+      }
+    }
+    function recalcularSinRespuesta (marcador) {
+      return marcador - 3;
     }
 
-    it("suma mas puntos si acierta muy rapido", function(){
-        expect(recalcularMarcador(0, true, 1)).toBe(2);
-        expect(recalcularMarcador(2, true, 1)).toBe(4);
+    it ("suma los puntos si acierta muy rápido", function(){
+      expect (recalcularAcertandoPregunta(0, 1)).toBe(2);
+      expect (recalcularAcertandoPregunta(1, 1)).toBe(3);
     });
-
-    it("resta puntos si fallo y tardo mucho tiempo", function(){
-        expect(recalcularMarcador(0, false, 11)).toBe(-2);
-        expect(recalcularMarcador(2, false, 11)).toBe(0);
+    it ("suma menos puntos si tarda mucho en dar la respuesta correcta", function(){
+      expect (recalcularAcertandoPregunta(1, 5)).toBe(2);
+      expect (recalcularAcertandoPregunta(1, 10)).toBe(2);
     });
-  
-    it("suma puntos si acierto entre 2 y 10 segundos", function(){
-        expect(recalcularMarcador(0, true, 10)).toBe(1);
-        expect(recalcularMarcador(2, true, 2)).toBe(3);
+    it ("no cambia la puntuación si tarda mucho en acertar", function(){
+      expect (recalcularAcertandoPregunta(1, 11)).toBe(1);
     });
-
-    it("devuelve puntos si acierto en mas de 10 segundos", function(){
-        expect(recalcularMarcador(0, true, 11)).toBe(0);
-        expect(recalcularMarcador(2, true, 11)).toBe(2);
+    it ("resta puntos si falla y tarda mucho", function(){
+      expect (recalcularFallandoPregunta(1, 11)).toBe(-1);
     });
-    it("resta puntos si fallo y tardo poco tiempo", function(){
-        expect(recalcularMarcador(0, false, 10)).toBe(-1);
-        expect(recalcularMarcador(2, false, 10)).toBe(1);
+    it ("resta menos puntos si falla muy rápido", function(){
+      expect (recalcularFallandoPregunta(0, 9)).toBe(-1);
+      expect (recalcularFallandoPregunta(0, 10)).toBe(-1);
     });
-    it("resta puntos si tarda mas de 20segundos", function(){
-        expect(recalcularMarcador(0, false, 21)).toBe(-3);
-        expect(recalcularMarcador(2, true, 21)).toBe(-1);
+    it ("resta puntos si tarda mucho en responder", function(){
+      expect (recalcularFallandoPregunta(0, 21)).toBe(-2);
     });
-
+    it ("resta puntos si no hay respuesta", function(){
+      expect (recalcularSinRespuesta(0)).toBe(-3);
+    });
 });
