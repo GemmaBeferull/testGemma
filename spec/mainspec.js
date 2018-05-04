@@ -13,6 +13,7 @@
 *      No se puede pasar sin responder
 *      Si en 20 segundos no has respondido , pasa a siguiente pregunta y pierdes 3 punto
 *
+
 * */
 
 
@@ -23,7 +24,46 @@
 //     {title: '¿Cuál es el animal más rápido del mundo?', answer: {a: 'Guepardo', b: 'León', c:'Tortuga' }, correctAnswer: 'a'}
 //   ]
 
+    describe('Compara respuesta', function(){
+        var questions=
+            {
+                id:1,
+                question: 'Capital de Portugal?',
+                answers:[
+                    {id:1, answer1:'Lisboa'}, 
+                    {id:2, answer2:'Faro'},
+                    {id:3, answer3:'Porto'}
+                ],
+                correctAnswerId: 1,
+                correctAnswer: 'Lisboa'
+            }
 
+
+        function IsAnswerCorrect(correctAnswer, selectedAnswer){
+            if (correctAnswer == selectedAnswer){
+                return true
+            }
+            if (correctAnswer !== selectedAnswer){
+                return false
+            }
+        }
+
+        it("compara respuesta", function(){
+            expect(IsAnswerCorrect('Lisboa', 'Lisboa')).toBe(true);
+            expect(IsAnswerCorrect('Lisboa', 'Porto')).toBe(false);
+        });
+       
+        it("compara respuesta utilizando strings del array", function(){
+            expect(IsAnswerCorrect(questions.correctAnswer, 'Lisboa')).toBe(true);
+            expect(IsAnswerCorrect(questions.correctAnswer, 'Faro')).toBe(false);
+        });
+        it("compara respuesta utilizando id del array", function(){
+            expect(IsAnswerCorrect(questions.correctAnswerId, 1)).toBe(true);
+            expect(IsAnswerCorrect(questions.correctAnswerID, 2)).toBe(false);
+        });
+
+       
+    });
 
 
   describe('reiniciar tiempo', function(){
